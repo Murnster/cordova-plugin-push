@@ -91,6 +91,11 @@ module.exports = {
 
     onSuccess({ isEnabled: !notifier.setting });
   },
+  hasCriticalPermission: function (onSuccess) {
+    var notifier = Windows.UI.Notifications.ToastNotificationManager.createToastNotifier();
+
+    onSuccess({ isEnabled: !notifier.setting });
+  },
   subscribe: function () {
     console.log('Subscribe is unsupported');
   },

@@ -368,6 +368,13 @@ module.exports = {
     });
   },
 
+  hasCriticalPermission: function (successCallback, errorCallback) {
+    const granted = Notification && Notification.permission === 'granted';
+    successCallback({
+      isEnabled: granted
+    });
+  },
+
   unregister: function (successCallback, errorCallback, options) {
     PushNotification.unregister(successCallback, errorCallback, options);
   },

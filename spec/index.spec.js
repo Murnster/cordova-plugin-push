@@ -37,6 +37,11 @@ describe('phonegap-plugin-push', () => {
       expect(typeof PushNotification.hasPermission === 'function').toBe(true);
     });
 
+    it('should contain a hasCriticalPermission function', () => {
+      expect(PushNotification.hasCriticalPermission).toBeDefined();
+      expect(typeof PushNotification.hasCriticalPermission === 'function').toBe(true);
+    });
+
     it('should contain a createChannel function', () => {
       expect(PushNotification.createChannel).toBeDefined();
       expect(typeof PushNotification.createChannel === 'function').toBe(true);

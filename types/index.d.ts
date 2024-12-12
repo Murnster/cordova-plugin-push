@@ -361,6 +361,13 @@ declare namespace PhonegapPluginPush {
 		 * @param errorCallback Is called when the api fails to create a channel.
 		 * @param channel The options for the channel.
 		 */
+		hasCriticalPermission(successCallback: (data: {isEnabled: boolean}) => void, errorCallback: () => void): void;
+		/**
+		 * iOS only
+		 * Requests Critical Alerts permission for iOS.
+		 * @param successCallback Is called when the api successfully returns.
+		 * @param errorCallback Is called when the api fails.
+		 */
 		createChannel(successCallback: () => void, errorCallback: () => void, channel: Channel): void;
 		/**
 		 * Android only

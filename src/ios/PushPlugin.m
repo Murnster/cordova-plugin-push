@@ -538,6 +538,36 @@
     }
 }
 
+- (void)hasCriticalPermission:(CDVInvokedUrlCommand *)command
+{
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+        if (settings.authorizationStatus == UNAuthorizationStatusAuthorized) {
+            if (settings.criticalAlertSetting == UNNotificationSettingEnabled) {
+                // Critical alerts are already enabled
+                NSMutableDictionary* message = [NSMutableDictionary dictionaryWithCapacity:1];
+                [message setObject:[NSNumber numberWithBool:YES] forKey:@"isEnabled"];
+                CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
+                [self.commandDelegate sendPluginResult:commandResult callbackId:command.callbackId];
+            } else {
+                // Request critical alert permission
+                [center requestAuthorizationWithOptions:(UNAuthorizationOptionCriticalAlert) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+                    NSMutableDictionary* message = [NSMutableDictionary dictionaryWithCapacity:1];
+                    [message setObject:[NSNumber numberWithBool:granted] forKey:@"isEnabled"];
+                    CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
+                    [self.commandDelegate sendPluginResult:commandResult callbackId:command.callbackId];
+                }];
+            }
+        } else {
+            // Notifications are not authorized
+            NSMutableDictionary* message = [NSMutableDictionary dictionaryWithCapacity:1];
+            [message setObject:[NSNumber numberWithBool:NO] forKey:@"isEnabled"];
+            CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
+            [self.commandDelegate sendPluginResult:commandResult callbackId:command.callbackId];
+        }
+    }];
+}
+
 -(void)successWithMessage:(NSString *)myCallbackId withMsg:(NSString *)message
 {
     if (myCallbackId != nil)
